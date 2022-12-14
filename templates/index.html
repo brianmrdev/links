@@ -1,0 +1,88 @@
+{% extends 'base.html' %} {% block container %}
+{% load static %}
+
+{% for list in listado.object_list %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+            <h5 class="card-title"><a href="{% url 'public:link_detail' list.slug %}" class="text-decoration-none">{{ list.name }}</a></h5>
+            <a href="" data-bs-toggle="modal" data-bs-target="#qrCode{{ list.pk }}"><i class="fa-solid fa-qrcode fa-2xl"></i></a>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="qrCode{{ list.pk }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">QR Code</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body mx-auto">
+                        <div id="qrcode{{ list.pk }}"></div>
+                        <script>
+                            window.addEventListener("load", () => {
+                              var qrc = new QRCode(document.getElementById("qrcode{{ list.pk }}"), "{{ list.url }}");
+                            });
+                        </script>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+  
+        </div>
+        <p class="card-text">{{ list.description }}</p>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted"><i class="fa-regular fa-clock"></i> Última actualización {{ list.create_date|timesince }} {% if user.is_authenticated %} | <i class="fa-solid fa-eye"></i> {{ list.count_access }} {% endif %}</small>
+    </div>          
+</div>
+{% empty %}
+{% endfor %}
+        {% if listado.has_next or listado.has_previous%}
+            <nav aria-label="Page navigation">
+              <ul class="pagination justify-content-center mt-4">
+                {% if listado.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ listado.previous_page_number }}">Previos</a></li>
+                {% else %}
+                  <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previos</a></li>
+                {% endif %}
+
+                {% if listado.number|add:'-4' > 1 %}
+                    <li class="page-item"><a class="page-link" href="?page={{ listado.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+
+                {% for i in listado.paginator.page_range %}
+                    {% if listado.number == i %}
+                        <li class="page-item active" aria-current="page">
+                          <span class="page-link">
+                            {{ i }}
+                            <span class="sr-only">(current)</span>
+                          </span>
+                        </li>
+                    {% elif i > listado.number|add:'-5' and i < listado.number|add:'5' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if listado.paginator.num_pages > listado.number|add:'4' %}
+                  <li class="page-item"><a class="page-link" href="?page={{ listado.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+                  
+
+                {% if listado.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ listado.next_page_number }}">Siguientes</a>
+                  </li>
+                {% else %}
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Siguientes</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
+
+{% endblock %}
+{% block extrajs %}
+
+{% endblock %}
