@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>Links - {{ title }}</title>
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -20,7 +20,7 @@
         <!-- Fixed navbar -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
           <div class="container position-relative">
-            <a class="navbar-brand" href=""><i class="fa-solid fa-link"></i>  LINKS</a>            
+            <a class="navbar-brand" href="{% url 'public:index'%}"><i class="fa-solid fa-link"></i>  LINKS</a>            
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
@@ -67,7 +67,7 @@
                                             <span class="input-group-text" id="basic-addon1">
                                                 <span class="fas fa-user"></span>
                                             </span>
-                                            <input type="text" class="form-control" placeholder="username"
+                                            <input type="text" class="form-control" placeholder="Username"
                                                 id="username" name="username">
                                         </div>
                                     </div>

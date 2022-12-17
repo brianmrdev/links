@@ -5,7 +5,7 @@
 <div class="card mb-4">
     <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
-            <h5 class="card-title"><a href="{% url 'public:link_detail' list.slug %}" class="text-decoration-none">{{ list.name }}</a></h5>
+            <h5 class="card-title"><a href="{% url 'public:link_detail' list.slug %}" class="text-decoration-none" target="_blank">{{ list.name }}</a></h5>
             <a href="" data-bs-toggle="modal" data-bs-target="#qrCode{{ list.pk }}"><i class="fa-solid fa-qrcode fa-2xl"></i></a>
             
             <!-- Modal -->
@@ -33,7 +33,7 @@
         <p class="card-text">{{ list.description }}</p>
     </div>
     <div class="card-footer">
-        <small class="text-muted"><i class="fa-regular fa-clock"></i> Última actualización {{ list.create_date|timesince }} {% if user.is_authenticated %} | <i class="fa-solid fa-eye"></i> {{ list.count_access }} {% endif %}</small>
+        <small class="text-muted"><i class="fa-regular fa-clock"></i> Última actualización {{ list.create_date|timesince }} | <i class="fa-solid fa-tags"></i>  {% for category in list.category.all %} <a href="{% url 'public:link_category_list' category.slug %}" class="badge rounded-pill text-bg-secondary text-decoration-none">{{ category.name }}</a> {% endfor %} {% if user.is_authenticated %} | <i class="fa-solid fa-eye"></i> {{ list.count_access }} | {% if list.is_private %} <span class="badge text-bg-warning">Privado</span> {% endif %} {% endif %}</small>
     </div>          
 </div>
 {% empty %}

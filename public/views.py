@@ -6,13 +6,18 @@ from django.core.paginator import EmptyPage, InvalidPage, Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import forms, login, logout, authenticate
 from django.http import HttpResponse
-from bookmark.models import Link
+from bookmark.models import Link, Category
 from .forms import AddLinkForm
 
 
 class Index(View):
     def get(self, request):
-        all_link = Link.objects.all().order_by('-pk')
+        user = request.user
+        
+        if user.is_authenticated:
+            all_link = Link.objects.all().order_by('-pk')
+        else:
+            all_link = Link.objects.filter(is_private=False).order_by('-pk')
         
         paginator = Paginator(all_link, 10)
         try:
@@ -25,7 +30,7 @@ class Index(View):
             listado = paginator.page(paginator.num_pages)
         
         context_data = {
-            'title': 'Links',
+            'title': 'Home',
             'listado': listado,
             'addlinkform': AddLinkForm(),
         }
@@ -80,3 +85,30 @@ class AddLink(View):
             else:
                 msg = {'status': False, 'msg': 'Formulario no válido'}
                 return HttpResponse(json.dumps(msg))
+    
+
+class LinksViewDateCategory(View):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        getcategory = get_object_or_404(Category, slug=kwargs['url'])
+        
+        if user.is_authenticated:
+            listlink = Link.objects.filter(category=getcategory).order_by('-pk')
+        else:
+            listlink = Link.objects.filter(category=getcategory, is_private=False).order_by('-pk')
+        
+        paginator = Paginator(listlink, 10)
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
+        try:
+            listado = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            listado = paginator.page(paginator.num_pages)
+
+        context_data = {
+            'title': 'Categoría: {}'.format(getcategory.name),
+            'listado': listado,
+        }
+        return render(request, 'index.html', context_data)

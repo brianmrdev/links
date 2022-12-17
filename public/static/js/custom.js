@@ -23,7 +23,7 @@ $(function () {
             $.ajax
                 ({
                     type: "POST",
-                    url: "accounts/login/",
+                    url: "/accounts/login/",
                     data: dataString,
                     success: function (msg) {
                         if (msg == 1) {
