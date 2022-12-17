@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookmark',
     'public',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'links.urls'
@@ -127,3 +132,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'public/static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+LOGIN_URL = '/'
