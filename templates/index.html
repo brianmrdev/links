@@ -33,7 +33,7 @@
         <p class="card-text">{{ list.description }}</p>
     </div>
     <div class="card-footer">
-        <small class="text-muted"><i class="fa-regular fa-clock"></i> Última actualización {{ list.create_date|timesince }} | <i class="fa-solid fa-tags"></i>  {% for category in list.category.all %} <a href="{% url 'public:link_category_list' category.slug %}" class="badge rounded-pill text-bg-secondary text-decoration-none">{{ category.name }}</a> {% endfor %} {% if user.is_authenticated %} | <i class="fa-solid fa-eye"></i> {{ list.count_access }} | {% if list.is_private %} <span class="badge text-bg-warning">Privado</span> {% endif %} {% endif %}</small>
+        <small class="text-muted"><i class="fa-regular fa-clock"></i> Última actualización {{ list.create_date|timesince }} | <i class="fa-solid fa-tags"></i>  {% for category in list.category.all %} <a href="{% url 'public:link_category_list' category.slug %}" class="badge rounded-pill text-bg-secondary text-decoration-none">{{ category.name }}</a> {% endfor %} {% if user.is_authenticated %} | <i class="fa-solid fa-eye"></i> {{ list.count_access }} {% if list.is_private %} | <span class="badge text-bg-warning">Privado</span> {% endif %} | <a href="#" class="text-danger ml-2" data-toggle="tooltip" data-placement="right" title="Eliminar" onClick="delete_link({{ list.pk }})"><i class="fa-solid fa-trash-alt"></i></a>{% endif %}</small>
     </div>          
 </div>
 {% empty %}

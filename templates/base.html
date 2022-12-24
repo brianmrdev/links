@@ -1,172 +1,285 @@
 <!DOCTYPE html>
 <html class="h-100" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Links - {{ title }}</title>
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/select2.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/select2-bootstrap-5-theme.min.css' %}" /> 
-    <script src="{% static 'js/qrcode.min.js' %}"></script>    
-</head>
-<body class="d-flex flex-column h-100">
-
+    <link
+      rel="stylesheet"
+      href="{% static 'css/select2-bootstrap-5-theme.min.css' %}"
+    />
+    <script src="{% static 'js/qrcode.min.js' %}"></script>
+  </head>
+  <body class="d-flex flex-column h-100">
     <header>
-        <!-- Fixed navbar -->
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-          <div class="container position-relative">
-            <a class="navbar-brand" href="{% url 'public:index'%}"><i class="fa-solid fa-link"></i>  LINKS</a>            
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-              <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link disabled">Disabled</a>
-                </li>
-              </ul>              
-            </div>
-            <div class="d-flex align-items-center">
-              <div class="d-flex">                
-                {% if user.is_authenticated %}
-                  <a href="" class="link-light me-5" data-bs-toggle="modal" data-bs-target="#addLink"><i class="fa-solid fa-plus"></i></a>
-                  <a href="{% url 'public:logout' %}" class="link-light"><i class="fa-solid fa-sign-out-alt"></i></a>
-                {% else %}
-                  <a href="" class="link-light" data-bs-toggle="modal" data-bs-target="#login"><i class="fa-solid fa-user"></i></a>
-                {% endif %}                
-              </div>
-            </div>            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container position-relative">
+          <a class="navbar-brand" href="{% url 'public:index'%}"
+            ><i class="fa-solid fa-link"></i> LINKS</a
+          >
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled">Disabled</a>
+              </li>
+            </ul>
           </div>
-        </nav>
-        <div class="modal fade" id="login" tabindex="-1" role="dialog" 
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content rounded">
-                    <div class="modal-body p-0">
-                        <div class="card p-4">
-                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                            <div class="card-header border-0 bg-white text-center pb-0">
-                                <h2 class="h4">Inicie sesión con su nombre de usuario y contraseña</h2>                                
-                            </div>
-                            <div class="card-body p-0 p-md-4">
-                                <form id="form-login" class="mt-4">{% csrf_token %}
-                                    <div class="form-group mb-4">                                        
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon1">
-                                                <span class="fas fa-user"></span>
-                                            </span>
-                                            <input type="text" class="form-control" placeholder="Username"
-                                                id="username" name="username">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-group mb-4">                                            
-                                            <div class="input-group">
-                                                <span class="input-group-text" id="basic-addon2">
-                                                    <span class="fas fa-unlock-alt"></span>
-                                                </span>
-                                                <input type="password" placeholder="Password" class="form-control"
-                                                    id="password" name="password">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <div>
-                                                <a href="{% url 'public:index' %}"
-                                                    class="small text-right">¿Has olvidado tu contraseña?</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary" id="btnLogin"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              {% if user.is_authenticated %}
+              <a
+                href=""
+                class="link-light me-5"
+                data-bs-toggle="modal"
+                data-bs-target="#addLink"
+                ><i class="fa-solid fa-plus"></i
+              ></a>
+              <a href="{% url 'public:logout' %}" class="link-light"
+                ><i class="fa-solid fa-sign-out-alt"></i
+              ></a>
+              {% else %}
+              <a
+                href=""
+                class="link-light"
+                data-bs-toggle="modal"
+                data-bs-target="#login"
+                ><i class="fa-solid fa-user"></i
+              ></a>
+              {% endif %}
             </div>
+          </div>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
         </div>
-        <div class="modal fade" id="addLink" tabindex="-1" role="dialog" 
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content rounded">
-                    <div class="modal-body p-0">
-                        <div class="card p-4">
-                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                            <div class="card-header border-0 bg-white text-center pb-0">
-                                <h2 class="h4">Agregar nuevo link</h2>                                
-                            </div>
-                            <div class="card-body text-center p-0 p-md-4">
-                                <form id="addLinkForm" class="mt-4" action="{% url 'public:add_link' %}" method="POST">{% csrf_token %}
-                                    <div class="form-group mb-4">                                        
-                                      <label class="mb-1" for="model">{{ addlinkform.name.label }}</label>
-                                      {{ addlinkform.name }}
-                                    </div>
-                                    <div class="form-group mb-4">
-                                      <label class="mb-1" for="model">{{ addlinkform.url.label }}</label>
-                                      {{ addlinkform.url }}                                                                              
-                                    </div>
-                                    <div class="form-group mb-4">
-                                      <label class="mb-1" for="model">{{ addlinkform.description.label }}</label>
-                                      {{ addlinkform.description }}                                                                              
-                                    </div>
-                                    <div class="form-group mb-4">
-                                      <label class="mb-1" for="model">{{ addlinkform.category.label }}</label>
-                                      {{ addlinkform.category }}                                                                              
-                                    </div>
-                                    <div class="form-check mb-4">							
-                                      {{ addlinkform.is_private }}
-                                      <label class="form-check-label" for="id_is_private">{{ addlinkform.is_private.label }}</label>
-                                    </div>
-                                    <div>
-                                        <button id="btnFetch" type="submit" class="btn btn-primary" disabled><i class="fa-solid fa-check"></i> Guardar</button>
-                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Cancelar</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+      </nav>
+      <div
+        class="modal fade"
+        id="login"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content rounded">
+            <div class="modal-body p-0">
+              <div class="card p-4">
+                <button
+                  type="button"
+                  class="btn-close ms-auto"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+                <div class="card-header border-0 bg-white text-center pb-0">
+                  <h2 class="h4">
+                    Inicie sesión con su nombre de usuario y contraseña
+                  </h2>
                 </div>
+                <div class="card-body p-0 p-md-4">
+                  <form id="form-login" class="mt-4">
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                          <span class="fas fa-user"></span>
+                        </span>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Username"
+                          id="username"
+                          name="username"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="form-group mb-4">
+                        <div class="input-group">
+                          <span class="input-group-text" id="basic-addon2">
+                            <span class="fas fa-unlock-alt"></span>
+                          </span>
+                          <input
+                            type="password"
+                            placeholder="Password"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        class="d-flex justify-content-between align-items-center mb-4"
+                      >
+                        <div>
+                          <a
+                            href="{% url 'public:index' %}"
+                            class="small text-right"
+                            >¿Has olvidado tu contraseña?</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-grid">
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="btnLogin"
+                      >
+                        <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+      <div
+        class="modal fade"
+        id="addLink"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content rounded">
+            <div class="modal-body p-0">
+              <div class="card p-4">
+                <button
+                  type="button"
+                  class="btn-close ms-auto"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+                <div class="card-header border-0 bg-white text-center pb-0">
+                  <h2 class="h4">Agregar nuevo link</h2>
+                </div>
+                <div class="card-body text-center p-0 p-md-4">
+                  <form
+                    id="addLinkForm"
+                    class="mt-4"
+                    action="{% url 'public:add_link' %}"
+                    method="POST"
+                  >
+                    {% csrf_token %}
+                    <div class="form-group mb-4">
+                      <label class="mb-1" for="model"
+                        >{{ addlinkform.name.label }}</label
+                      >
+                      {{ addlinkform.name }}
+                    </div>
+                    <div class="form-group mb-4">
+                      <label class="mb-1" for="model"
+                        >{{ addlinkform.url.label }}</label
+                      >
+                      {{ addlinkform.url }}
+                    </div>
+                    <div class="form-group mb-4">
+                      <label class="mb-1" for="model"
+                        >{{ addlinkform.description.label }}</label
+                      >
+                      {{ addlinkform.description }}
+                    </div>
+                    <div class="form-group mb-4">
+                      <label class="mb-1" for="model"
+                        >{{ addlinkform.category.label }}</label
+                      >
+                      {{ addlinkform.category }}
+                    </div>
+                    <div class="form-check mb-4">
+                      {{ addlinkform.is_private }}
+                      <label class="form-check-label" for="id_is_private"
+                        >{{ addlinkform.is_private.label }}</label
+                      >
+                    </div>
+                    <div>
+                      <button
+                        id="btnFetch"
+                        type="submit"
+                        class="btn btn-primary"
+                        disabled
+                      >
+                        <i class="fa-solid fa-check"></i> Guardar
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        <i class="fa-solid fa-xmark"></i> Cancelar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <!-- Begin page content -->
-  <main class="flex-shrink-0">
-    <div class="container">
-        <div class="mx-auto" style="max-width: 500px;">
-            <form action="" class="mt-3">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search text" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-            </form>    
+    <main class="flex-shrink-0">
+      <div class="container">
+        <div class="mx-auto" style="max-width: 500px">
+          <form action="" class="mt-3">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search text"
+                aria-describedby="button-addon2"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="button-addon2"
+              >
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </form>
         </div>
 
-        {% block container %}{% endblock %}        
-      
-    </div>
-  </main>
-  
-  <footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-      <p class="text-muted text-center mb-0"><a class="text-decoration-none link-secondary" href="https://github.com/brianmrdev/links"><i class="fa-solid fa-link"></i> LINKS</a> - Personal, minimalist and ultra-fast bookmarking service. </p>
-    </div>
-  </footer>
-    
+        {% block container %}{% endblock %}
+      </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <p class="text-muted text-center mb-0">
+          <a
+            class="text-decoration-none link-secondary"
+            href="https://github.com/brianmrdev/links"
+            ><i class="fa-solid fa-link"></i> LINKS</a
+          >
+          - Personal, minimalist and ultra-fast bookmarking service.
+        </p>
+      </div>
+    </footer>
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/jquery-3.6.2.min.js' %}"></script>
@@ -175,87 +288,111 @@
     <script src="{% static 'js/select2.full.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script>
-      $(document).ready(function () {        
-        $('#addLinkForm').bootstrapValidator({
-          message: 'Este valor no es valido',
-          feedbackIcons: {
-            valid: 'fa-solid fa-check',
-            invalid: 'fa-solid fa-times',
-            validating: 'fas fa-spinner fa-pulse'
-          },
-          submitHandler: function (validator, form, submitButton) {
-            document.querySelector('#btnFetch').innerHTML = '<i class="fas fa-spinner fa-pulse" style="padding: 0; margin-right: 10px;"></i> Guardando...';
-            $.post(form.attr('action'), form.serialize(), function (result) {
-              if (result.status == false || result.status == 'false') {
-                var Toast = Swal.mixin({
-                  toast: true,
-                  orientation: 'auto',
-                  showConfirmButton: false,
-                  timer: 4000
-                });
-                document.querySelector('#btnFetch').innerHTML = '<i class="fa-solid fa-check"></i> Guardar';
-                Toast.fire({
-                  icon: 'error',
-                  title: result.msg
-                });
-              } else if (result.status == true || result.status == 'true') {
-                $('#addLink').modal('toggle');
-                $("form input[type=text]").each(function() { this.value = '' });
-                window.setTimeout(function() {
-                  window.location = '';
-                }, 2);
-                document.querySelector('#btnFetch').innerHTML = '<i class="fa-solid fa-check"></i> Guardar';						
-      
-              } else {
-                $('#addLinkForm').bootstrapValidator('disableSubmitButtons', false);
-              }
-            }, 'json')
-            .done(function(msg){  })
-            .fail(function(xhr, status, error) {
-              document.querySelector('#btnFetch').innerHTML = '<i class="fa-solid fa-check"></i> Guardar';
-              Swal.fire({
-                icon: 'error',
-                title: error,
-                showConfirmButton: false
-              })
-            });
-            
-          },
-          fields: {
-            name: {
-              validators: {
-                notEmpty: {
-                  message: 'Este campo no puede estar vacio'
-                }                
-              }
+      $(document).ready(function () {
+        $("#addLinkForm")
+          .bootstrapValidator({
+            message: "Este valor no es valido",
+            feedbackIcons: {
+              valid: "fa-solid fa-check",
+              invalid: "fa-solid fa-times",
+              validating: "fas fa-spinner fa-pulse",
             },
-            url: {
-              validators: {
-                notEmpty: {
-                  message: 'Este campo no puede estar vacio'
+            submitHandler: function (validator, form, submitButton) {
+              document.querySelector("#btnFetch").innerHTML =
+                '<i class="fas fa-spinner fa-pulse" style="padding: 0; margin-right: 10px;"></i> Guardando...';
+              $.post(
+                form.attr("action"),
+                form.serialize(),
+                function (result) {
+                  if (result.status == false || result.status == "false") {
+                    var Toast = Swal.mixin({
+                      toast: true,
+                      orientation: "auto",
+                      showConfirmButton: false,
+                      timer: 4000,
+                    });
+                    document.querySelector("#btnFetch").innerHTML =
+                      '<i class="fa-solid fa-check"></i> Guardar';
+                    Toast.fire({
+                      icon: "error",
+                      title: result.msg,
+                    });
+                  } else if (result.status == true || result.status == "true") {
+                    $("#addLink").modal("toggle");
+                    $("form input[type=text]").each(function () {
+                      this.value = "";
+                    });
+                    var Toast = Swal.mixin({
+                      toast: true,
+                      orientation: "auto",
+                      showConfirmButton: false,
+                      timer: 4000,
+                    });
+                    Toast.fire({
+                      icon: "success",
+                      title: result.msg,
+                    });
+                    window.setTimeout(function () {
+                      window.location = "";
+                    }, 2000);
+                    document.querySelector("#btnFetch").innerHTML =
+                      '<i class="fa-solid fa-check"></i> Guardar';
+                  } else {
+                    $("#addLinkForm").bootstrapValidator(
+                      "disableSubmitButtons",
+                      false
+                    );
+                  }
                 },
-                uri: {
-                  message: 'URL no válida'
+                "json"
+              )
+                .done(function (msg) {})
+                .fail(function (xhr, status, error) {
+                  document.querySelector("#btnFetch").innerHTML =
+                    '<i class="fa-solid fa-check"></i> Guardar';
+                  Swal.fire({
+                    icon: "error",
+                    title: error,
+                    showConfirmButton: false,
+                  });
+                });
+            },
+            fields: {
+              name: {
+                validators: {
+                  notEmpty: {
+                    message: "Este campo no puede estar vacio",
+                  },
                 },
-              }
-            }
-          }
-        })
-          .on('success.field.fv', function (e, data) {
-            if (data.fv.getInvalidFields().length > 0) {    // There is invalid field
+              },
+              url: {
+                validators: {
+                  notEmpty: {
+                    message: "Este campo no puede estar vacio",
+                  },
+                  uri: {
+                    message: "URL no válida",
+                  },
+                },
+              },
+            },
+          })
+          .on("success.field.fv", function (e, data) {
+            if (data.fv.getInvalidFields().length > 0) {
+              // There is invalid field
               data.fv.disableSubmitButtons(true);
             }
           });
       });
     </script>
     <script>
-      $(document).ready(function() {
-          $('.select2').select2({
-              theme: "bootstrap-5",
-              dropdownParent: $('#addLink') 
-          });
+      $(document).ready(function () {
+        $(".select2").select2({
+          theme: "bootstrap-5",
+          dropdownParent: $("#addLink"),
         });
-      </script>    
+      });
+    </script>
     {% block extrajs %}{% endblock %}
-</body>
+  </body>
 </html>

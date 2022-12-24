@@ -2,11 +2,13 @@ from django.db import models
 from django.forms import URLField
 from django.utils.text import slugify
 
+
 class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(max_length=255, unique=True)
     is_private = models.BooleanField(default=False)
-    create_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    create_date = models.DateTimeField(
+        auto_now_add=True, blank=True, null=True)
     modify_date = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def get_absolute_url(self):
@@ -31,7 +33,8 @@ class Link(models.Model):
     description = models.TextField(blank=True, null=True)
     is_private = models.BooleanField(default=False)
     count_access = models.IntegerField(default=0)
-    create_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    create_date = models.DateTimeField(
+        auto_now_add=True, blank=True, null=True)
     modify_date = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):

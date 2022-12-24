@@ -6,6 +6,8 @@ from django.core.paginator import EmptyPage, InvalidPage, Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import forms, login, logout, authenticate
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 from bookmark.models import Link, Category
 from .forms import AddLinkForm
 
@@ -13,12 +15,12 @@ from .forms import AddLinkForm
 class Index(View):
     def get(self, request):
         user = request.user
-        
+
         if user.is_authenticated:
             all_link = Link.objects.all().order_by('-pk')
         else:
             all_link = Link.objects.filter(is_private=False).order_by('-pk')
-        
+
         paginator = Paginator(all_link, 10)
         try:
             page = int(request.GET.get('page', '1'))
@@ -28,7 +30,7 @@ class Index(View):
             listado = paginator.page(page)
         except (EmptyPage, InvalidPage):
             listado = paginator.page(paginator.num_pages)
-        
+
         context_data = {
             'title': 'Home',
             'listado': listado,
@@ -44,6 +46,7 @@ class LinkDetail(View):
         getlink.save()
         response = redirect(getlink.url)
         return response
+
 
 class Login(View):
     form = forms.AuthenticationForm
@@ -78,25 +81,27 @@ class AddLink(View):
                 msg = {'status': False,
                        'msg': 'Está intentando registrar un link con un TITULO que ya existe'}
                 return HttpResponse(json.dumps(msg))
-            elif add.is_valid():                
+            elif add.is_valid():
                 add.save()
                 msg = {'status': True, 'msg': 'Link guardado'}
                 return HttpResponse(json.dumps(msg))
             else:
                 msg = {'status': False, 'msg': 'Formulario no válido'}
                 return HttpResponse(json.dumps(msg))
-    
+
 
 class LinksViewDateCategory(View):
     def get(self, request, *args, **kwargs):
         user = request.user
         getcategory = get_object_or_404(Category, slug=kwargs['url'])
-        
+
         if user.is_authenticated:
-            listlink = Link.objects.filter(category=getcategory).order_by('-pk')
+            listlink = Link.objects.filter(
+                category=getcategory).order_by('-pk')
         else:
-            listlink = Link.objects.filter(category=getcategory, is_private=False).order_by('-pk')
-        
+            listlink = Link.objects.filter(
+                category=getcategory, is_private=False).order_by('-pk')
+
         paginator = Paginator(listlink, 10)
         try:
             page = int(request.GET.get('page', '1'))
@@ -112,3 +117,19 @@ class LinksViewDateCategory(View):
             'listado': listado,
         }
         return render(request, 'index.html', context_data)
+
+
+@csrf_exempt
+def delete_link(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        try:
+            Link.objects.get(pk=request.POST['id']).delete()
+            msg = {'status': True, 'msg': 'Link eliminado correctamente'}
+            return HttpResponse(json.dumps(msg))
+        except ObjectDoesNotExist:
+            msg = {'status': False,
+                   'msg': 'El link que usted decea eliminar no existe'}
+            return HttpResponse(json.dumps(msg))
+    else:
+        msg = {'status': False, 'msg': 'Ocurrió un error'}
+        return HttpResponse(json.dumps(msg))

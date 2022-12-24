@@ -11,5 +11,7 @@ urlpatterns = [
     path('accounts/login/', Login.as_view(), name='login'),
     path('accounts/logout/', Logout.as_view(), name='logout'),
     path('link/add/', login_required(AddLink.as_view()), name='add_link'),
-    path('category/<slug:url>/', LinksViewDateCategory.as_view(), name='link_category_list'),
+    path('category/<slug:url>/', LinksViewDateCategory.as_view(),
+         name='link_category_list'),
+    path('link/delete/', login_required(delete_link), name='delete_link'),
 ]
