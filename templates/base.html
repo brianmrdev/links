@@ -7,6 +7,7 @@
     <title>Links - {{ title }}</title>
 
     {% load static %}
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/link_logo.svg' %}" />
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}" />
@@ -292,102 +293,7 @@
     <script src="{% static 'js/select2.full.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script>
-      $(document).ready(function () {
-        $("#addLinkForm")
-          .bootstrapValidator({
-            message: "Este valor no es valido",
-            feedbackIcons: {
-              valid: "fa-solid fa-check",
-              invalid: "fa-solid fa-times",
-              validating: "fas fa-spinner fa-pulse",
-            },
-            submitHandler: function (validator, form, submitButton) {
-              document.querySelector("#btnFetch").innerHTML =
-                '<i class="fas fa-spinner fa-pulse" style="padding: 0; margin-right: 10px;"></i> Guardando...';
-              $.post(
-                form.attr("action"),
-                form.serialize(),
-                function (result) {
-                  if (result.status == false || result.status == "false") {
-                    var Toast = Swal.mixin({
-                      toast: true,
-                      orientation: "auto",
-                      showConfirmButton: false,
-                      timer: 4000,
-                    });
-                    document.querySelector("#btnFetch").innerHTML =
-                      '<i class="fa-solid fa-check"></i> Guardar';
-                    Toast.fire({
-                      icon: "error",
-                      title: result.msg,
-                    });
-                  } else if (result.status == true || result.status == "true") {
-                    $("#addLink").modal("toggle");
-                    $("form input[type=text]").each(function () {
-                      this.value = "";
-                    });
-                    var Toast = Swal.mixin({
-                      toast: true,
-                      orientation: "auto",
-                      showConfirmButton: false,
-                      timer: 4000,
-                    });
-                    Toast.fire({
-                      icon: "success",
-                      title: result.msg,
-                    });
-                    window.setTimeout(function () {
-                      window.location = "";
-                    }, 2000);
-                    document.querySelector("#btnFetch").innerHTML =
-                      '<i class="fa-solid fa-check"></i> Guardar';
-                  } else {
-                    $("#addLinkForm").bootstrapValidator(
-                      "disableSubmitButtons",
-                      false
-                    );
-                  }
-                },
-                "json"
-              )
-                .done(function (msg) {})
-                .fail(function (xhr, status, error) {
-                  document.querySelector("#btnFetch").innerHTML =
-                    '<i class="fa-solid fa-check"></i> Guardar';
-                  Swal.fire({
-                    icon: "error",
-                    title: error,
-                    showConfirmButton: false,
-                  });
-                });
-            },
-            fields: {
-              name: {
-                validators: {
-                  notEmpty: {
-                    message: "Este campo no puede estar vacio",
-                  },
-                },
-              },
-              url: {
-                validators: {
-                  notEmpty: {
-                    message: "Este campo no puede estar vacio",
-                  },
-                  uri: {
-                    message: "URL no válida",
-                  },
-                },
-              },
-            },
-          })
-          .on("success.field.fv", function (e, data) {
-            if (data.fv.getInvalidFields().length > 0) {
-              // There is invalid field
-              data.fv.disableSubmitButtons(true);
-            }
-          });
-      });
+      
     </script>
     <script>
       $(document).ready(function () {

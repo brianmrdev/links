@@ -155,3 +155,28 @@ def search_result(request):
 
         return JsonResponse({'data': res})
     return JsonResponse({})
+
+
+class LinkEdit(View):
+    def get(self, request, *args, **kwargs):
+        getlink = get_object_or_404(Link, slug=kwargs['slug'])
+        context = {'title': getlink.name, 'getlink': getlink, 'editlinkform': AddLinkForm(instance=getlink)}
+        return render(request, 'link_edit.html', context)
+
+
+class LinkSave(View):
+    def post(self, request):
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            linkid = Link.objects.get(pk=request.POST['pk'])
+            add = AddLinkForm(request.POST, instance=linkid)
+            if add.is_valid():
+                add.save()
+
+                msg = {'status': True, 'msg': 'Link actualizada correctamente'}
+                return HttpResponse(json.dumps(msg))
+            else:
+                msg = {'status': False, 'msg': 'Ocurio un error'}
+                return HttpResponse(json.dumps(msg))
+        else:
+            msg = {'status': False, 'msg': 'Formulario no válido'}
+            return HttpResponse(json.dumps(msg))

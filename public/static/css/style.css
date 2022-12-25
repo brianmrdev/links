@@ -377,5 +377,10 @@ main > .container {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
 
+.page-header {
+  padding-bottom: 9px;
+  margin: 20px 0px 20px;
+  border-bottom: 1px solid rgb(183, 183, 183);
 }

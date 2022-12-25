@@ -1,3 +1,187 @@
+$(document).ready(function () {
+  $("#addLinkForm")
+    .bootstrapValidator({
+      message: "Este valor no es valido",
+      feedbackIcons: {
+        valid: "fa-solid fa-check",
+        invalid: "fa-solid fa-times",
+        validating: "fas fa-spinner fa-pulse",
+      },
+      submitHandler: function (validator, form, submitButton) {
+        document.querySelector("#btnFetch").innerHTML =
+          '<i class="fas fa-spinner fa-pulse" style="padding: 0; margin-right: 10px;"></i> Guardando...';
+        $.post(
+          form.attr("action"),
+          form.serialize(),
+          function (result) {
+            if (result.status == false || result.status == "false") {
+              var Toast = Swal.mixin({
+                toast: true,
+                orientation: "auto",
+                showConfirmButton: false,
+                timer: 4000,
+              });
+              document.querySelector("#btnFetch").innerHTML =
+                '<i class="fa-solid fa-check"></i> Guardar';
+              Toast.fire({
+                icon: "error",
+                title: result.msg,
+              });
+            } else if (result.status == true || result.status == "true") {
+              $("#addLink").modal("toggle");
+              $("form input[type=text]").each(function () {
+                this.value = "";
+              });
+              var Toast = Swal.mixin({
+                toast: true,
+                orientation: "auto",
+                showConfirmButton: false,
+                timer: 4000,
+              });
+              Toast.fire({
+                icon: "success",
+                title: result.msg,
+              });
+              window.setTimeout(function () {
+                window.location = "";
+              }, 2000);
+              document.querySelector("#btnFetch").innerHTML =
+                '<i class="fa-solid fa-check"></i> Guardar';
+            } else {
+              $("#addLinkForm").bootstrapValidator(
+                "disableSubmitButtons",
+                false
+              );
+            }
+          },
+          "json"
+        )
+          .done(function (msg) {})
+          .fail(function (xhr, status, error) {
+            document.querySelector("#btnFetch").innerHTML =
+              '<i class="fa-solid fa-check"></i> Guardar';
+            Swal.fire({
+              icon: "error",
+              title: error,
+              showConfirmButton: false,
+            });
+          });
+      },
+      fields: {
+        name: {
+          validators: {
+            notEmpty: {
+              message: "Este campo no puede estar vacio",
+            },
+          },
+        },
+        url: {
+          validators: {
+            notEmpty: {
+              message: "Este campo no puede estar vacio",
+            },
+            uri: {
+              message: "URL no válida",
+            },
+          },
+        },
+      },
+    })
+
+    $("#editLinkForm")
+    .bootstrapValidator({
+      message: "Este valor no es valido",
+      feedbackIcons: {
+        valid: "fa-solid fa-check",
+        invalid: "fa-solid fa-times",
+        validating: "fas fa-spinner fa-pulse",
+      },
+      submitHandler: function (validator, form, submitButton) {
+        document.querySelector("#btnFetchEditLink").innerHTML =
+          '<i class="fas fa-spinner fa-pulse" style="padding: 0; margin-right: 10px;"></i> Guardando...';
+        $.post(
+          form.attr("action"),
+          form.serialize(),
+          function (result) {
+            if (result.status == false || result.status == "false") {
+              var Toast = Swal.mixin({
+                toast: true,
+                orientation: "auto",
+                showConfirmButton: false,
+                timer: 4000,
+              });
+              document.querySelector("#btnFetchEditLink").innerHTML =
+                '<i class="fa-solid fa-check"></i> Guardar';
+              Toast.fire({
+                icon: "error",
+                title: result.msg,
+              });
+            } else if (result.status == true || result.status == "true") {
+              var Toast = Swal.mixin({
+                toast: true,
+                orientation: "auto",
+                showConfirmButton: false,
+                timer: 4000,
+              });
+              Toast.fire({
+                icon: "success",
+                title: result.msg,
+              });
+              window.setTimeout(function () {
+                window.location = "/";
+              }, 2000);
+              document.querySelector("#btnFetchEditLink").innerHTML =
+                '<i class="fa-solid fa-check"></i> Guardar';
+            } else {
+              $("#editLinkForm").bootstrapValidator(
+                "disableSubmitButtons",
+                false
+              );
+            }
+          },
+          "json"
+        )
+          .done(function (msg) {})
+          .fail(function (xhr, status, error) {
+            document.querySelector("#btnFetchEditLink").innerHTML =
+              '<i class="fa-solid fa-check"></i> Guardar';
+            Swal.fire({
+              icon: "error",
+              title: error,
+              showConfirmButton: false,
+            });
+          });
+      },
+      fields: {
+        name: {
+          validators: {
+            notEmpty: {
+              message: "Este campo no puede estar vacio",
+            },
+          },
+        },
+        url: {
+          validators: {
+            notEmpty: {
+              message: "Este campo no puede estar vacio",
+            },
+            uri: {
+              message: "URL no válida",
+            },
+          },
+        },
+      },
+    })
+
+
+    .on("success.field.fv", function (e, data) {
+      if (data.fv.getInvalidFields().length > 0) {
+        // There is invalid field
+        data.fv.disableSubmitButtons(true);
+      }
+    });
+});
+
 $(function () {
   $("#form-login").submit(function () {
     var usuario = $("#username").val();
@@ -148,7 +332,7 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value
 const sendSearchData = (link) => {
   $.ajax({
     type: 'POST',
-    url: 'link/search/',
+    url: '/link/search/',
     data: {
       'csrfmiddlewaretoken': csrf,
       'link': link,
@@ -160,7 +344,7 @@ const sendSearchData = (link) => {
         resultBox.classList.add('show')
         data.forEach(link=> {
           resultBox.innerHTML += `
-          <li><a class="dropdown-item" href="${link.slug}/" target="_blank">${link.name} <p class="text-muted">${link.description}</p></a></li>
+          <li><a class="dropdown-item" href="/${link.slug}/" target="_blank">${link.name} <p class="text-muted">${link.description}</p></a></li>
           `
         })
       } else {
@@ -180,4 +364,9 @@ const sendSearchData = (link) => {
 
 searchInput.addEventListener('keyup', e=>{
   sendSearchData(e.target.value)
+})
+
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
 })

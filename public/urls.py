@@ -15,5 +15,7 @@ urlpatterns = [
          name='link_category_list'),
     path('link/delete/', login_required(delete_link), name='delete_link'),
     path('link/search/', search_result, name='search'),
+    path('link/edit/<slug:slug>/', login_required(LinkEdit.as_view()), name='edit_link'),
+    path('link/save/', login_required(LinkSave.as_view()), name='link_save'),
     
 ]

@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% block container %}
+{% load static %}
+
+<div class="page-header">
+    <div class="row">
+        <div class="col-12">
+            <h3>Editar datos de {{ getlink.name }}</h3>
+        </div>
+    </div>
+</div>
+
+<form id="editLinkForm" role="form" action="{% url 'public:link_save' %}">{% csrf_token %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group mb-4">
+                    <label class="mb-1" for="model">{{ editlinkform.url.label }}</label>
+                    {{ editlinkform.url }}
+                </div>
+                <div class="form-group mb-4">
+                    <label class="mb-1" for="model">{{ editlinkform.name.label }}</label>
+                    {{ editlinkform.name }}
+                </div>
+                <div class="form-group mb-4">
+                    <label class="mb-1" for="model">{{ editlinkform.description.label }}</label>
+                    {{ editlinkform.description }}
+                </div>
+                <div class="form-group mb-4">
+                    <label class="mb-1" for="model">{{ editlinkform.category.label }}</label>
+                    {{ editlinkform.category }}
+                </div>
+                <div class="form-check mb-4">
+                    {{ editlinkform.is_private }}
+                    <label class="form-check-label" for="id_is_private">{{ editlinkform.is_private.label }}</label>
+                </div>
+            </div>
+            <input name="pk" value="{{ getlink.pk }}" type="hidden"/>
+            <div class="col-md-12">
+                <button id="btnFetchEditLink" type="submit" class="btn btn-primary" disabled ><i class="fa-solid fa-check"></i> Guardar</button>
+                <a class="btn btn-secondary float-right" href="{% url 'public:index'%}" role="button"><i class="fa fa-reply"></i> Cancelar</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+{% block extrajs %}
+<script>
+    $(document).ready(function () {
+      $(".select2").select2({
+        theme: "bootstrap-5",
+      });
+    });
+  </script>
+{% endblock %}
