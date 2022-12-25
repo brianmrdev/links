@@ -2,7 +2,7 @@
 {% load static %}
 
 {% for list in listado.object_list %}
-<div class="card mb-4">
+<div class="card mb-4 mt-3">
     <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
             <h5 class="card-title"><a href="{% url 'public:link_detail' list.slug %}" class="text-decoration-none" target="_blank">{{ list.name }}</a></h5>

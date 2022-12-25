@@ -77,24 +77,24 @@ function delete_link(i) {
   }).then(function (result) {
     if (result.isConfirmed) {
       var dataString = "id=" + i;
-      // $('#spinner').html(`
-      // <div class="preloader">
-      // <div class="loader">
-      //   <div class="spinner">
-      //     <div class="spinner-container">
-      //       <div class="spinner-rotator">
-      //         <div class="spinner-left">
-      //           <div class="spinner-circle"></div>
-      //         </div>
-      //         <div class="spinner-right">
-      //           <div class="spinner-circle"></div>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>
-      // </div>
-      // `);
+      $('#spinner').html(`
+      <div class="preloader">
+      <div class="loader">
+        <div class="spinner">
+          <div class="spinner-container">
+            <div class="spinner-rotator">
+              <div class="spinner-left">
+                <div class="spinner-circle"></div>
+              </div>
+              <div class="spinner-right">
+                <div class="spinner-circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      `);
       $.ajax({
         type: "POST",
         url: "/link/delete/",
@@ -102,7 +102,7 @@ function delete_link(i) {
         dataType: "json",
         success: function (result) {
           if (result.status == true || result.status == "true") {
-            //$('#spinner').empty()
+            $('#spinner').empty()
             var Toast = Swal.mixin({
               toast: true,
               orientation: "auto",
@@ -118,7 +118,7 @@ function delete_link(i) {
             }, 2000);
           }
           if (result.status == false || result.status == "false") {
-            //$('#spinner').empty()
+            $('#spinner').empty()
             Swal.fire({
               icon: "error",
               title: result.msg,
@@ -127,7 +127,7 @@ function delete_link(i) {
           }
         },
         error: function (jqXHR, status, error) {
-          //$('#spinner').empty()
+          $('#spinner').empty()
           Swal.fire({
             icon: "error",
             title: error,
@@ -138,3 +138,46 @@ function delete_link(i) {
     }
   });
 }
+
+const url = window.location.href
+const searchForm = document.getElementById('search-form')
+const searchInput  = document.getElementById('search-input')
+const resultBox  = document.getElementById('result-box')
+const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+const sendSearchData = (link) => {
+  $.ajax({
+    type: 'POST',
+    url: 'link/search/',
+    data: {
+      'csrfmiddlewaretoken': csrf,
+      'link': link,
+    },
+    success: (res)=> {      
+      const data = res.data
+      if (Array.isArray(data)) {
+        resultBox.innerHTML = ""
+        resultBox.classList.add('show')
+        data.forEach(link=> {
+          resultBox.innerHTML += `
+          <li><a class="dropdown-item" href="${link.slug}/" target="_blank">${link.name} <p class="text-muted">${link.description}</p></a></li>
+          `
+        })
+      } else {
+        if (searchInput.value.length > 0) {
+          resultBox.classList.add('show')
+          resultBox.innerHTML = `<b>${data}</b>`
+        } else {
+          resultBox.classList.remove('show')
+        }
+      }
+    },
+    error: (err)=> {
+      console.log(err)
+    }
+  })
+}
+
+searchInput.addEventListener('keyup', e=>{
+  sendSearchData(e.target.value)
+})

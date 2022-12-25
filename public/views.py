@@ -133,3 +133,25 @@ def delete_link(request):
     else:
         msg = {'status': False, 'msg': 'Ocurrió un error'}
         return HttpResponse(json.dumps(msg))
+
+def search_result(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        res = None
+        link = request.POST.get('link')
+        qs = Link.objects.filter(name__icontains=link)
+        if len(qs) > 0 and len(link) > 0:
+            data= []
+            for pos in qs:
+                item = {
+                    'pk': pos.pk,
+                    'name': pos.name,
+                    'slug': pos.slug,
+                    'description': pos.description
+                }
+                data.append(item)
+            res = data
+        else:
+            res = 'No link found ...'
+
+        return JsonResponse({'data': res})
+    return JsonResponse({})
