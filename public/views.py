@@ -21,7 +21,7 @@ class Index(View):
         else:
             all_link = Link.objects.filter(is_private=False).order_by('-pk')
 
-        paginator = Paginator(all_link, 10)
+        paginator = Paginator(all_link, 5)
         try:
             page = int(request.GET.get('page', '1'))
         except ValueError:
@@ -32,7 +32,7 @@ class Index(View):
             listado = paginator.page(paginator.num_pages)
 
         context_data = {
-            'title': 'Home',
+            'title': 'Personal, minimalist and ultra-fast bookmarking service.',
             'listado': listado,
             'addlinkform': AddLinkForm(),
         }

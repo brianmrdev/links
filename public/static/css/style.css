@@ -1,3 +1,8 @@
+body {
+  color: #585978;
+  background: #F3F3F3;
+}
+
 main > .container {
   padding: 60px 15px 0;
 }
@@ -383,4 +388,25 @@ main > .container {
   padding-bottom: 9px;
   margin: 20px 0px 20px;
   border-bottom: 1px solid rgb(183, 183, 183);
+}
+
+.bg-custom {
+  background: #ffffff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  color: #585978;
+}
+.link-custom, .navbar-brand {
+  color: #585978;
+}
+.card {
+  transition: all 0.3s ease-out 0s;
+}
+.card:hover {
+  border-color: #2F80ED;
+}
+a {
+  color: #323450;
+}
+.footer {
+  background: #323450;
 }

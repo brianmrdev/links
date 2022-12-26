@@ -21,47 +21,40 @@
   <body class="d-flex flex-column h-100">
     <header>
       <!-- Fixed navbar -->
-      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <nav class="navbar navbar-expand-md fixed-top bg-custom">
         <div class="container position-relative">
-          <a class="navbar-brand" href="{% url 'public:index'%}"
-            ><i class="fa-solid fa-link"></i> LINKS</a
-          >
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled">Disabled</a>
-              </li>
-            </ul>
-          </div>
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
+          <a class="navbar-brand" href="{% url 'public:index' %}">
+            <img
+              src="{% static 'img/link_logo.svg' %}"
+              class="me-2"
+              height="20"
+              alt="LINKS Logo"
+              loading="lazy"
+            />
+            <small>LINKS</small>
+          </a>          
+          <div class="d-flex align-items-center">            
               {% if user.is_authenticated %}
               <a
                 href=""
-                class="link-light me-5"
+                class="link-custom me-4"
                 data-bs-toggle="modal"
                 data-bs-target="#addLink"
                 ><i class="fa-solid fa-plus"></i
               ></a>
-              <a href="{% url 'public:logout' %}" class="link-light"
+              <a href="{% url 'public:logout' %}" class="link-custom"
                 ><i class="fa-solid fa-sign-out-alt"></i
               ></a>
               {% else %}
               <a
                 href=""
-                class="link-light"
+                class="link-custom"
                 data-bs-toggle="modal"
                 data-bs-target="#login"
                 ><i class="fa-solid fa-user"></i
               ></a>
               {% endif %}
-            </div>
+            
           </div>
           <button
             class="navbar-toggler"
@@ -129,18 +122,7 @@
                             name="password"
                           />
                         </div>
-                      </div>
-                      <div
-                        class="d-flex justify-content-between align-items-center mb-4"
-                      >
-                        <div>
-                          <a
-                            href="{% url 'public:index' %}"
-                            class="small text-right"
-                            >¿Has olvidado tu contraseña?</a
-                          >
-                        </div>
-                      </div>
+                      </div>                      
                     </div>
                     <div class="d-grid">
                       <button
@@ -273,16 +255,16 @@
       </div>
     </main>
 
-    <footer class="footer mt-auto py-3 bg-light">
-      <div class="container">
-        <p class="text-muted text-center mb-0">
+    <footer class="footer mt-auto py-3">
+      <div class="container">        
+        <p class="text-white text-center mb-0">
           <a
-            class="text-decoration-none link-secondary"
+            class="text-decoration-none link-light"
             href="https://github.com/brianmrdev/links"
             ><i class="fa-solid fa-link"></i> LINKS</a
           >
           - Personal, minimalist and ultra-fast bookmarking service.
-        </p>
+        </p>        
       </div>
     </footer>
 
